@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Zero Trust Network Demo"
+description = "An educational college-network simulator that evaluates sample access requests using identity, device posture, resource sensitivity, and network context. Explore explainable risk scoring, allow/restrict/deny outcomes, policy controls, and an audit dashboard without monitoring a real network."
+version = "1.0.0"
+id = "artifacts/zero-trust-demo"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20784
+
+[services.development]
+run = "pnpm --filter @workspace/zero-trust-demo run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/zero-trust-demo", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/zero-trust-demo/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20784"
+BASE_PATH = "/"
